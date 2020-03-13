@@ -1,5 +1,12 @@
 <template>
   <div>
+    <!-- 
+      tabbar的使用：
+        tab-bar：定义整个tab-bar的大盒子
+        tab-bar-item：定义盒子中每项的内容
+          path属性：定义路由地址 
+          active-font-color属性：定义文本被选中时的颜色 
+     -->
     <tab-bar>
       <tab-bar-item path="/home">
         <img slot="item_icon" src="~assets/img/tabbar/home.svg">
@@ -26,8 +33,8 @@
 </template>
 
 <script>
-import TabBar from './TabBar';
-import TabBarItem from './TabBarItem';
+import TabBar from 'components/common/tabbar/TabBar';
+import TabBarItem from 'components/common/tabbar/TabBarItem';
 export default {
   name: "MainTabBar",
   components: {

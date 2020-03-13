@@ -6,7 +6,7 @@
     <div v-else>
       <slot name="item_active_icon"></slot>
     </div>
-    <div><slot name="item_text"></slot></div>
+    <div :style="fontColor"><slot name="item_text"></slot></div>
   </div>
 </template>
 
@@ -23,10 +23,17 @@ export default {
       default: "",
       require: true,
     },
+    activeFontColor: {
+      type: String,
+      default: "#ff5777",
+    },
   },
   computed: {
     isActive(){
       return this.path == this.$route.path;
+    },
+    fontColor(){
+      return this.isActive ? {color: this.activeFontColor}: {};
     },
   },
   methods: {
