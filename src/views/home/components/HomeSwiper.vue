@@ -1,8 +1,11 @@
 <template>
   <swiper>
-    <slider v-for="item in result">
-      <img :src="item.image">
+    <slider v-for="(item,index) in result" :key="index">
+      <a :href="item.link">
+        <img :src="item.image">
+      </a>
     </slider>
+    
   </swiper>
 </template>
 
