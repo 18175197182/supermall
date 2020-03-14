@@ -1,7 +1,8 @@
 <template>
   <div id="home">
     <home-nav-bar class="home-nav" />
-    <banner :results="bannerList" />
+    <home-swiper class="home-swiper" :result="bannerList">
+    </home-swiper>
   </div>
 </template>
 
@@ -9,12 +10,12 @@
 // 导入组件
 import {getHomeMultidata} from 'network/home.js';
 import HomeNavBar from 'views/home/components/HomeNavBar';
-import Banner from 'components/common/banner/Banner';
+import HomeSwiper from 'views/home/components/HomeSwiper';
 export default {
   name: "Home",
   components: {
     HomeNavBar,
-    Banner,
+    HomeSwiper,
   },
   data(){
     return {
@@ -43,7 +44,7 @@ export default {
     background-color: var(--color-tint);
     color: var(--color-background);
   }
-  .banner {
-    margin-top: 43px;
+  .home-swiper {
+    margin-top: 44px;
   }
 </style>
