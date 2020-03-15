@@ -19,11 +19,13 @@ export default {
   data(){
     return {
       currentShowIndex: 0,
+      goodsTypes: ['pop','new','sell'],
     };
   },
   methods: {
     onClickItem(index){
       this.currentShowIndex = index;
+      this.$emit('selectGoodsType',this.goodsTypes[index]);
     },
   },
 }

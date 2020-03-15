@@ -1,78 +1,28 @@
 <template>
   <div id="home">
     <home-nav-bar class="home-nav" />
-    <home-swiper class="home-swiper" :result="bannerList">
-    </home-swiper>
+    <home-swiper class="home-swiper" :result="bannerList"></home-swiper>
     <home-recommend :recommends="recommendList" />
     <home-feature-view />
-    <tab-control :titles="tabControlTitles" />
-    <ul>
-      <li>商品列表1</li>
-      <li>商品列表2</li>
-      <li>商品列表3</li>
-      <li>商品列表4</li>
-      <li>商品列表5</li>
-      <li>商品列表6</li>
-      <li>商品列表7</li>
-      <li>商品列表8</li>
-      <li>商品列表9</li>
-      <li>商品列表10</li>
-      <li>商品列表11</li>
-      <li>商品列表12</li>
-      <li>商品列表13</li>
-      <li>商品列表14</li>
-      <li>商品列表15</li>
-      <li>商品列表16</li>
-      <li>商品列表17</li>
-      <li>商品列表18</li>
-      <li>商品列表19</li>
-      <li>商品列表20</li>
-      <li>商品列表21</li>
-      <li>商品列表22</li>
-      <li>商品列表23</li>
-      <li>商品列表24</li>
-      <li>商品列表25</li>
-      <li>商品列表26</li>
-      <li>商品列表27</li>
-      <li>商品列表28</li>
-      <li>商品列表29</li>
-      <li>商品列表30</li>
-      <li>商品列表31</li>
-      <li>商品列表32</li>
-      <li>商品列表33</li>
-      <li>商品列表34</li>
-      <li>商品列表35</li>
-      <li>商品列表36</li>
-      <li>商品列表37</li>
-      <li>商品列表38</li>
-      <li>商品列表39</li>
-      <li>商品列表40</li>
-      <li>商品列表41</li>
-      <li>商品列表42</li>
-      <li>商品列表43</li>
-      <li>商品列表44</li>
-      <li>商品列表45</li>
-      <li>商品列表46</li>
-      <li>商品列表47</li>
-      <li>商品列表48</li>
-      <li>商品列表49</li>
-      <li>商品列表50</li>
-    </ul>
+    <tab-control :titles="tabControlTitles" @selectGoodsType="selectGoodsType"/>
+    <goods-list :goods-list="currentShowData"/>
+    
   </div>
 </template>
 
 <script>
 // 导入公共组件
-import TabControl from 'components/common/tabcontrol/TabControl';
+import TabControl from "components/common/tabcontrol/TabControl";
+import GoodsList from "components/content/goods/GoodsList";
 
 // 导入子组件组件
-import HomeNavBar from 'views/home/components/HomeNavBar';
-import HomeSwiper from 'views/home/components/HomeSwiper';
-import HomeRecommend from './components/HomeRecommend';
-import HomeFeatureView from './components/HomeFeatureView';
+import HomeNavBar from "views/home/components/HomeNavBar";
+import HomeSwiper from "views/home/components/HomeSwiper";
+import HomeRecommend from "./components/HomeRecommend";
+import HomeFeatureView from "./components/HomeFeatureView";
 
 // 导入方法
-import {getHomeMultidata} from 'network/home.js';
+import { getHomeMultidata,getHomeData } from "network/home.js";
 
 export default {
   name: "Home",
@@ -82,39 +32,93 @@ export default {
     HomeRecommend,
     HomeFeatureView,
     TabControl,
+    GoodsList,
   },
-  data(){
+  data() {
     return {
-       banner: null,
-       bannerList: null,
-       dKeyword: null,
-       keywords: null,
-       recommend: null,
-       recommendList: null,
-       // 保存tabControl组件的title
-       tabControlTitles: ['流行','新品','推荐'],
-    }
+      banner: null,
+      bannerList: null,
+      dKeyword: null,
+      keywords: null,
+      recommend: null,
+      recommendList: null,
+      // 当前显示的数据类型【sell，new，pop】
+      currentShowType: 'pop',
+      // 保存当前显示的商品数组
+      currentShowData: [],
+      // 保存tabControl组件的title
+      tabControlTitles: ["流行", "新品", "推荐"],
+      // 保存发送请求的参数
+      requestGoodsDataParams: [
+        { type: "sell", page: 1 },
+        { type: "pop", page: 1 },
+        { type: "new", page: 1 }
+      ],
+      // 保存/home/data的商品数据
+      goods: {
+        pop: {
+          page: 1,
+          list: [],
+        },
+        sell: {
+          page: 1,
+          list: [],
+        },
+        new: {
+          page: 1,
+          list: [],
+        },
+      },
+    };
+  },
+  methods: {
+    // 封装获取/home/multidata的数据，并保存到data中
+    getHomeMultidata() {
+      getHomeMultidata().then(res => {
+        this.banner = res.data.banner;
+        this.dKeyword = res.data.dKeyword;
+        this.kgeteywords = res.data.keywords;
+        this.recommend = res.data.recommend;
+        this.bannerList = this.banner.list;
+        this.recommendList = this.recommend.list;
+      });
+    },
+    // 封装获取/home/data的数据，并保存在data中
+    getHomeData(){
+      for(const params of this.requestGoodsDataParams){
+        getHomeData(params).then(res => {
+          if(this.currentShowType == params.type){
+            this.currentShowData = res.data.list;
+          }
+          this.goods[params.type].page = res.data.page;
+          this.goods[params.type].list = res.data.list; 
+        });
+      }  
+    },
+    // 点击tabcontrol，切换显示内容
+    selectGoodsType(dataType){
+      this.currentShowData = this.goods[dataType].list;
+    },
   },
   // 创建组件之后就发送请求
-  created(){
-    getHomeMultidata().then(res => {
-      this.banner = res.data.banner;
-      this.dKeyword = res.data.dKeyword;
-      this.keywords = res.data.keywords;
-      this.recommend = res.data.recommend;
-      this.bannerList = this.banner.list;
-      this.recommendList = this.recommend.list;
-    });  
+  created() {
+    // 获取/home/multidata的数据
+    this.getHomeMultidata();
+
+    // 获取/home/data数据
+    this.getHomeData();
+
   },
-}
+};
 </script>
 
 <style scoped>
-  .home-nav {
-    background-color: var(--color-tint);
-    color: var(--color-background);
-  }
-  .home-swiper {
-    margin-top: 44px;
-  }
+.home-nav {
+  background-color: var(--color-tint);
+  color: var(--color-background);
+  z-index: 9;
+}
+.home-swiper {
+  margin-top: 44px;
+}
 </style>
