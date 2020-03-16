@@ -1,7 +1,7 @@
 <template>
   <div id="home">
     <home-nav-bar />
-    <scroll class="content" ref="scroll" :probe-type="3">
+    <scroll class="content" ref="scroll" :probe-type="3" :pull-up-load="true">
       <home-swiper :result="bannerList"></home-swiper>
       <home-recommend :recommends="recommendList" />
       <home-feature-view />
@@ -11,13 +11,13 @@
     <back-top v-show="showBackTop" @click.native="clickBackTop"/>
   </div>
 </template>
-
 <script>
 // 导入公共组件
 import TabControl from "components/common/tabcontrol/TabControl";
 import GoodsList from "components/content/goods/GoodsList";
 import Scroll from "components/common/scroll/Scroll";
 import BackTop from "components/content/backTop/BackTop";
+import {debounce} from 'common/util.js';
 
 // 导入子组件组件
 import HomeNavBar from "views/home/components/HomeNavBar";
@@ -115,36 +115,25 @@ export default {
         });
       }
     },
+
     // 点击tabcontrol，切换显示内容
     selectGoodsType(dataType) {
       this.currentShowType = dataType;
       this.currentShowData = this.goods[dataType].list;
     },
-    getMoreData(event) {
-      // event.srcElement.scrollingElement.scrollHeight 页面总高度
-      // event.srcElement.scrollingElement.clientHeight 页面可视高度
-      // event.srcElement.scrollingElement.scrollTop  当前向下移动的高度
-      const scrollingEle = event.srcElement.scrollingElement;
-      // 获取最大可移动高度
-      const maxScrollRemove =
-        scrollingEle.scrollHeight - scrollingEle.clientHeight;
-      // 最大高度 减去 可视高度 就是我们触发获取更多数据的高度
-      const getMoreDataHeight = maxScrollRemove - scrollingEle.clientHeight;
-      // 满足条件获取更多数据
-      if (scrollingEle.scrollTop >= getMoreDataHeight) {
-        const page = this.goods[this.currentShowType].page + 1;
-        const params = {
-          type: this.currentShowType,
-          page: page
-        };
-        getHomeData(params).then(res => {
-          this.goods[params.type].page = res.data.page;
-          this.goods[params.type].list = this.goods[params.type].list.concat(
-            res.data.list
-          );
-          this.currentShowData = this.goods[params.type].list;
-        });
-      }
+    // 上拉后加载更多数据
+    getMoreData(){
+      this.goods[this.currentShowType].page += 1
+      const params = {
+        type: this.currentShowType,
+        page: this.goods[this.currentShowType].page,
+      };
+      getHomeData(params).then(res => {
+        this.goods[this.currentShowType].list.push(...res.data.list);
+        this.currentShowData = this.goods[this.currentShowType].list;
+        // 数据加载完毕之后，调用scroll的结束下拉，
+        this.$refs.scroll.handleFinishPullUp();
+      });
     }
   },
   // 创建组件之后就发送请求
@@ -155,11 +144,15 @@ export default {
     // 获取/home/data数据
     this.getHomeData();
 
-    // 组件创建后添加一个监听事件【第三个参数为true，表示从组件元素到子元素的传播路径上触发】
-    // document.addEventListener("scroll", this.getMoreData, true);
   },
   mounted(){
+    // 绑定scroll事件，显示回到顶部的组件
     this.$refs.scroll.on('scroll',this.checkShowBackTop);
+    // 绑定上拉事件，用于上拉加载更多
+    const func = debounce(this,this.getMoreData);
+    this.$refs.scroll.on('pullingUp',() => {  
+      func();
+    });
   },
 };
 </script>
@@ -177,9 +170,6 @@ export default {
   width: 100%;
   height: 49px;
   z-index: 9;
-}
-.home-swiper {
-  margin-top: 44px;
 }
 .tab-control {
   height: 50px;

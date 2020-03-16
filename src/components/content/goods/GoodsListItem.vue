@@ -1,7 +1,7 @@
 <template>
   <div class="goods-list-item">
     <a :href="goods.link">
-      <img :src="goods.show.img" class="goods-img" />
+      <img :src="goods.show.img" class="goods-img" @load="imgLoadOk"/>
       <div class="goods-title">{{goods.title}}</div>
     </a>
     <div class="goods-info">
@@ -31,6 +31,7 @@ export default {
     };
   },
   methods: {
+    // 是否收藏
     isCollection() {
       this.isClicked = !this.isClicked;
       if (this.isClicked) {
@@ -38,8 +39,12 @@ export default {
       }else{
         this.goods.cfav--;
       }
-    }
-  }
+    },
+    imgLoadOk(){
+      // 抛出一个事件总线
+      this.$bus.$emit('imgLoadOk');
+    },
+  },
 };
 </script>
 

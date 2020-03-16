@@ -6,6 +6,8 @@
 
 <script>
 import GoodsListItem from "./GoodsListItem";
+import { debounce } from "common/util.js";
+
 export default {
   name: "GoodsList",
   components: {
@@ -57,13 +59,13 @@ export default {
       }
       // 给父盒子设置高度,防止塌陷
       const fatherEle = document.querySelector(".goods-list");
-      let maxHeight = rowHeights[0];
+      /* let maxHeight = rowHeights[0];
       for (const value of rowHeights) {
         if (maxHeight < value) {
           maxHeight = value;
         }
-      }
-      fatherEle.style.height = maxHeight + "px";
+      } */
+      fatherEle.style.height = this.minHeight + "px";
     },
     // 获取到高度最小值
     getMinHeight(rowHeights) {
@@ -93,9 +95,10 @@ export default {
     goodsList: {
       deep: true,
       handler() {
-        setTimeout(() => {
-          this.showFallsStyle();
-        }, 100);
+        const func = debounce(this,this.showFallsStyle);
+        this.$bus.$on("imgLoadOk",() => {
+          func();
+        });
       }
     }
   }
