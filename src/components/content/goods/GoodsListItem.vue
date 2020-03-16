@@ -43,13 +43,12 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .goods-list-item {
-  float: left;
   font-size: 14px;
   width: 49%;
   text-align: center;
-  padding: 5px;
+  padding-left: 5px;
 }
 .goods-list-item .goods-img {
   border-radius: 10px;

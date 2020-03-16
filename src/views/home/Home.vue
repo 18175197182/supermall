@@ -1,13 +1,14 @@
 <template>
   <div id="home">
     <home-nav-bar />
-    <scroll class="content">
+    <scroll class="content" ref="scroll" :probe-type="3">
       <home-swiper :result="bannerList"></home-swiper>
       <home-recommend :recommends="recommendList" />
       <home-feature-view />
       <tab-control :titles="tabControlTitles" @selectGoodsType="selectGoodsType" />
       <goods-list :goods-list="currentShowData" />
     </scroll>
+    <back-top v-show="showBackTop" @click.native="clickBackTop"/>
   </div>
 </template>
 
@@ -16,6 +17,7 @@
 import TabControl from "components/common/tabcontrol/TabControl";
 import GoodsList from "components/content/goods/GoodsList";
 import Scroll from "components/common/scroll/Scroll";
+import BackTop from "components/content/backTop/BackTop";
 
 // 导入子组件组件
 import HomeNavBar from "views/home/components/HomeNavBar";
@@ -36,6 +38,7 @@ export default {
     TabControl,
     GoodsList,
     Scroll,
+    BackTop
   },
   data() {
     return {
@@ -44,6 +47,8 @@ export default {
       dKeyword: null,
       keywords: null,
       recommend: null,
+      // 是否显示BackTop
+      showBackTop: false,
       recommendList: null,
       // 当前显示的数据类型【sell，new，pop】
       currentShowType: "pop",
@@ -75,6 +80,18 @@ export default {
     };
   },
   methods: {
+    // 判断是否显示BackTop
+    checkShowBackTop(position){
+      if(-position.y >= document.body.clientHeight){
+        this.showBackTop = true;
+      }else {
+        this.showBackTop = false;
+      }
+    },
+    // 回到top的方法
+    clickBackTop(){
+      this.$refs.scroll.scrollTo(0,0);
+    },
     // 封装获取/home/multidata的数据，并保存到data中
     getHomeMultidata() {
       getHomeMultidata().then(res => {
@@ -118,11 +135,13 @@ export default {
         const page = this.goods[this.currentShowType].page + 1;
         const params = {
           type: this.currentShowType,
-          page: page,
+          page: page
         };
         getHomeData(params).then(res => {
           this.goods[params.type].page = res.data.page;
-          this.goods[params.type].list = this.goods[params.type].list.concat(res.data.list);
+          this.goods[params.type].list = this.goods[params.type].list.concat(
+            res.data.list
+          );
           this.currentShowData = this.goods[params.type].list;
         });
       }
@@ -138,7 +157,10 @@ export default {
 
     // 组件创建后添加一个监听事件【第三个参数为true，表示从组件元素到子元素的传播路径上触发】
     // document.addEventListener("scroll", this.getMoreData, true);
-  }
+  },
+  mounted(){
+    this.$refs.scroll.on('scroll',this.checkShowBackTop);
+  },
 };
 </script>
 
@@ -160,12 +182,8 @@ export default {
   margin-top: 44px;
 }
 .tab-control {
-  position: -webkit-sticky;
-  position: sticky;
-  top: 44px;
   height: 50px;
   line-height: 50px;
-  z-index: 9;
 }
 #home .scroll {
   position: absolute;
