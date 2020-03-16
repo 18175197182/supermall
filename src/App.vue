@@ -17,4 +17,10 @@ export default {
 
 <style>
   @import "assets/css/base.css";
+  .main-tab-bar {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 9;
+  }
 </style>

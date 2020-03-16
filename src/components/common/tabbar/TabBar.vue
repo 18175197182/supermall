@@ -17,9 +17,7 @@ export default {
 <style>
   .tab_bar {
     display: flex;
-    position: fixed;
-    bottom: 0;
-    height: 49px;
+    height: 100%;
     width: 100%;
     box-shadow: 0px 0px 1px 5px rgba(100, 100, 100, 0.2);
     text-align: center;

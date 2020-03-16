@@ -1,6 +1,6 @@
 <template>
   <div id="home">
-    <home-nav-bar class="home-nav" />
+    <home-nav-bar />
     <home-swiper class="home-swiper" :result="bannerList"></home-swiper>
     <home-recommend :recommends="recommendList" />
     <home-feature-view />
@@ -113,9 +113,13 @@ export default {
 </script>
 
 <style scoped>
-.home-nav {
+.home-nav-bar {
+  position: fixed;
+  top: 0;
   background-color: var(--color-tint);
   color: var(--color-background);
+  width: 100%;
+  height: 49px;
   z-index: 9;
 }
 .home-swiper {

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="main-tab-bar">
     <!-- 
       tabbar的使用：
         tab-bar：定义整个tab-bar的大盒子
