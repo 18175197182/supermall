@@ -1,12 +1,13 @@
 <template>
-  <swiper>
-    <slider v-for="(item,index) in result" :key="index">
-      <a :href="item.link">
-        <img :src="item.image">
-      </a>
-    </slider>
-    
-  </swiper>
+  <div class="home-swiper">
+    <swiper>
+      <slider v-for="(item,index) in result" :key="index">
+        <a :href="item.link">
+          <img :src="item.image" />
+        </a>
+      </slider>
+    </swiper>
+  </div>
 </template>
 
 <script>
@@ -17,7 +18,7 @@ export default {
     result: {
       type: Array,
       default: () => [],
-      require: true,
+      require: true
     }
   },
   components: {

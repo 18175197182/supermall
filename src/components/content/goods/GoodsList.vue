@@ -55,6 +55,15 @@ export default {
         itemEles[i].style.top = this.minHeight + "px";
         rowHeights[this.minIndex] += itemEles[i].offsetHeight;
       }
+      // 给父盒子设置高度,防止塌陷
+      const fatherEle = document.querySelector(".goods-list");
+      let maxHeight = rowHeights[0];
+      for(const value of rowHeights){
+        if(maxHeight < value){
+          maxHeight = value;
+        }
+      }
+      fatherEle.style.height = maxHeight + 'px';
     },
     // 获取到高度最小值
     getMinHeight(rowHeights) {

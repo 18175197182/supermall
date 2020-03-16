@@ -1,7 +1,7 @@
 <template>
   <div id="home">
     <home-nav-bar />
-    <home-swiper class="home-swiper" :result="bannerList"></home-swiper>
+    <home-swiper :result="bannerList"></home-swiper>
     <home-recommend :recommends="recommendList" />
     <home-feature-view />
     <tab-control :titles="tabControlTitles" @selectGoodsType="selectGoodsType"/>
@@ -124,5 +124,13 @@ export default {
 }
 .home-swiper {
   margin-top: 44px;
+}
+.tab-control {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 44px;
+  height: 50px;
+  line-height: 50px;
+  z-index: 9;
 }
 </style>
