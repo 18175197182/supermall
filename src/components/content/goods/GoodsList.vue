@@ -58,12 +58,12 @@ export default {
       // 给父盒子设置高度,防止塌陷
       const fatherEle = document.querySelector(".goods-list");
       let maxHeight = rowHeights[0];
-      for(const value of rowHeights){
-        if(maxHeight < value){
+      for (const value of rowHeights) {
+        if (maxHeight < value) {
           maxHeight = value;
         }
       }
-      fatherEle.style.height = maxHeight + 'px';
+      fatherEle.style.height = maxHeight + "px";
     },
     // 获取到高度最小值
     getMinHeight(rowHeights) {
@@ -86,9 +86,7 @@ export default {
     }
   },
   mounted() {
-    // setTimeout(() => {
-    //   this.showFallsStyle();
-    // }, 600);
+    
   },
   // 监听数据的变化
   watch: {
