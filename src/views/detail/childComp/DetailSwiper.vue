@@ -2,7 +2,7 @@
   <div class="detail-swiper">
     <swiper>
       <slider v-for="(item,index) in topImages" :key="index">
-        <img :src="item">
+        <img :src="item" @load="imgLoadOk">
       </slider>
     </swiper>
   </div>
@@ -21,6 +21,12 @@ export default {
     topImages: {
       type: Array,
       default: () => [],
+    },
+  },
+  methods: {
+    imgLoadOk(){
+      this.$bus.$emit('imgLoadRefresh');
+      console.log("-----------detailSwiper");
     },
   },
 }

@@ -80,23 +80,23 @@ export default {
     },
     initStyleParams() {
       // 获取到每个item的width
-      this.itemWidth = document.querySelector(".goods-list-item").offsetWidth;
-      // 获取到当前网页可见宽度
-      this.totalWidth = window.screen.width;
-      // 计算出每一行容纳多少个item
-      this.lignCount = Math.floor(this.totalWidth / this.itemWidth);
+      if (document.querySelector(".goods-list-item")) {
+        this.itemWidth = document.querySelector(".goods-list-item").offsetWidth;
+        // 获取到当前网页可见宽度
+        this.totalWidth = window.screen.width;
+        // 计算出每一行容纳多少个item
+        this.lignCount = Math.floor(this.totalWidth / this.itemWidth);
+      }
     }
   },
-  mounted() {
-    
-  },
+  mounted() {},
   // 监听数据的变化
   watch: {
     goodsList: {
       deep: true,
       handler() {
-        const func = debounce(this,this.showFallsStyle);
-        this.$bus.$on("imgLoadOk",() => {
+        const func = debounce(this, this.showFallsStyle);
+        this.$bus.$on("imgLoadOk", () => {
           func();
         });
       }

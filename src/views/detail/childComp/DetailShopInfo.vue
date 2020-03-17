@@ -59,7 +59,12 @@ export default {
   flex-wrap: wrap;
   justify-content: space-between;
   padding-bottom: 10px;
+  font-size: 14px;
   border-bottom: 5px solid rgba(0, 0, 0, 0.05);
+}
+.detail-shop-info .shop-services::after {
+  content: '';
+  width: 33%;
 }
 .detail-shop-info .shop-services .service {
   padding: 10px;

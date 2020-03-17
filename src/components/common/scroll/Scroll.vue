@@ -40,6 +40,7 @@ export default {
     },
     // 当图片加载完成后调用，因为会调用多次，所以封装一个防抖函数
     imgLoadOk(){
+      console.log('-----------scroll');
       this.scroll.refresh();
     },
   },
@@ -54,6 +55,7 @@ export default {
     });
     const refresh = debounce(this,this.imgLoadOk);
     this.$bus.$on('imgLoadOk',refresh);
+    this.$bus.$on('imgLoadRefresh',refresh);
   },
 }
 </script>
