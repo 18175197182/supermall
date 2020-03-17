@@ -1,11 +1,12 @@
 <template>
   <div id="home">
     <home-nav-bar />
+    <tab-control v-show="showTopTabControl" class="topTabControl" :titles="tabControlTitles" @selectGoodsType="selectGoodsType" />
     <scroll class="content" ref="scroll" :probe-type="3" :pull-up-load="true">
       <home-swiper :result="bannerList"></home-swiper>
       <home-recommend :recommends="recommendList" />
       <home-feature-view />
-      <tab-control :titles="tabControlTitles" @selectGoodsType="selectGoodsType" />
+      <tab-control :titles="tabControlTitles" @selectGoodsType="selectGoodsType" ref="tabControl"/>
       <goods-list :goods-list="currentShowData" />
     </scroll>
     <back-top v-show="showBackTop" @click.native="clickBackTop"/>
@@ -76,7 +77,11 @@ export default {
           page: 1,
           list: []
         }
-      }
+      },
+      // 是否显示贴顶的tabControl
+      showTopTabControl: false,
+      // 保存home中滚动的位置
+      saveY: 0,
     };
   },
   methods: {
@@ -115,7 +120,16 @@ export default {
         });
       }
     },
-
+    // 判断是否显示贴顶的TabControl
+    checkShowTopTabControl(){
+      const tabControl = this.$refs.tabControl;
+      if(!this.showTopTabControl && tabControl.$el.getBoundingClientRect().top <= 44){
+        this.showTopTabControl = true;
+      }
+      if(this.showTopTabControl && tabControl.$el.getBoundingClientRect().top > 44){
+        this.showTopTabControl = false;
+      }
+    },
     // 点击tabcontrol，切换显示内容
     selectGoodsType(dataType) {
       this.currentShowType = dataType;
@@ -153,6 +167,17 @@ export default {
     this.$refs.scroll.on('pullingUp',() => {  
       func();
     });
+    // 监听页面滚动，给让tabControl贴在上面
+    this.$refs.scroll.on('scroll',this.checkShowTopTabControl);
+  },
+  // 切换回来时，回到刚刚保存的位置
+  activated(){
+    this.$refs.scroll.scroll.refresh();
+    this.$refs.scroll.scrollTo(0,this.saveY,0);
+  },
+  // 切换别的组件时保存y的位置
+  deactivated(){
+    this.saveY = this.$refs.scroll.scroll.y;
   },
 };
 </script>
@@ -162,13 +187,15 @@ export default {
   position: relative;
   height: 100vh;
 }
+
+/* 由于现在是局部滚动，所以这个可以不用设置fixed */
 .home-nav-bar {
-  position: fixed;
-  top: 0;
+  /* position: fixed; */
+  /* top: 0; */
   background-color: var(--color-tint);
   color: var(--color-background);
   width: 100%;
-  height: 49px;
+  height: 44px;
   z-index: 9;
 }
 .tab-control {
@@ -182,5 +209,10 @@ export default {
   left: 0;
   right: 0;
   overflow: hidden;
+}
+.topTabControl {
+  position: relative;
+  top: 0;
+  z-index: 9;
 }
 </style>

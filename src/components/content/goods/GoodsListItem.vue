@@ -1,9 +1,7 @@
 <template>
   <div class="goods-list-item">
-    <a :href="goods.link">
       <img :src="goods.show.img" class="goods-img" @load="imgLoadOk"/>
       <div class="goods-title">{{goods.title}}</div>
-    </a>
     <div class="goods-info">
       <span class="goods-price">{{goods.price}}</span>
       <span @click="isCollection">
