@@ -1,5 +1,5 @@
 <template>
-  <div class="goods-list-item">
+  <div class="goods-list-item" @click="goodsClick">
       <img :src="goods.show.img" class="goods-img" @load="imgLoadOk"/>
       <div class="goods-title">{{goods.title}}</div>
     <div class="goods-info">
@@ -41,6 +41,11 @@ export default {
     imgLoadOk(){
       // 抛出一个事件总线
       this.$bus.$emit('imgLoadOk');
+    },
+    // 点击商品跳转到详情页
+    goodsClick(){
+      // this.$router.push({path: '/detail',query: {iid: this.goods.iid}});
+      this.$router.push('/detail?iid=' + this.goods.iid);
     },
   },
 };

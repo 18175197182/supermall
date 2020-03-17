@@ -11,7 +11,7 @@ const Home = () => import('views/home/Home');
 const Cart = () => import('views/cart/Cart');
 const Categary = () => import('views/categary/Categary');
 const Me = () => import('views/me/Me');
-
+const Detail = () => import('views/detail/Detail');
 
 // 创建映射关系
 const routes = [
@@ -34,6 +34,10 @@ const routes = [
   {
     path: "/me",
     component: Me,
+  },
+  {
+    path: "/detail",
+    component: Detail,
   },
 ];
 
