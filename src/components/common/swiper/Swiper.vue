@@ -154,8 +154,9 @@ export default {
     setTimeout(() => {
       // 在slider前后添加一个slider
       this.handlerDOM();
-
-      this.startTimer();
+      if(this.sliderCount > 1){
+        this.startTimer();
+      }
     }, 100);
   }
 };
