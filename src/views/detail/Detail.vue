@@ -1,16 +1,20 @@
 <template>
   <div class="detail">
-    {{iid}}
+    <detail-nav-bar />
   </div>
 </template>
 
 <script>
+import DetailNavBar from './childComp/DetailNavBar';
 export default {
   name: "Detail",
   data(){
     return {
       iid: null,
     };
+  },
+  components: {
+    DetailNavBar,
   },
   created(){
     // 保存查询参数

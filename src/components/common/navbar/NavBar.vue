@@ -28,8 +28,13 @@ export default {
     line-height: 44px;
     text-align: center;
   }
-  .navbar .center {
+  .navbar .left {
     flex: 1;
   }
- 
+  .navbar .center {
+    flex: 2;
+  }
+  .navbar .right {
+    flex: 1;
+  }
 </style>
