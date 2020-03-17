@@ -36,6 +36,10 @@ export default {
 </script>
 
 <style scoped>
+.detail-nav-bar {
+  height: 44px;
+  background-color: white;
+}
 .detail-nav-bar .title {
   display: flex;
   font-size: 13px;

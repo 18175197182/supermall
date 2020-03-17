@@ -29,6 +29,6 @@ export default {
 <style scoped>
 .detail-swiper .hy-swiper{
   margin-top: 44px;
-  height: 300px;
+  height: 450px;
 }
 </style>
