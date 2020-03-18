@@ -105,10 +105,16 @@ export default {
 </script>
 
 <style scoped>
+.detail {
+  position: relative;
+  height: 100vh;
+  background-color: white;
+  z-index: 10;
+}
 .detail .detail-scroll {
   position: absolute;
   top: 44px;
-  bottom: 49px;
+  bottom: 0;
   left: 0;
   right: 0;
   overflow: hidden;

@@ -26,7 +26,6 @@ export default {
   methods: {
     imgLoadOk(){
       this.$bus.$emit('imgLoadRefresh');
-      console.log("-----------detailSwiper");
     },
   },
 }
