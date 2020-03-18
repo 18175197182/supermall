@@ -30,6 +30,7 @@
         </div>
       </div>
     </div>
+    <div class="allGoodsUrl"><a :href="shopInfo.allGoodsUrl">进店逛逛</a></div>
   </div>
 </template>
 
@@ -54,6 +55,9 @@ export default {
 </script>
 
 <style scoped>
+.detail-shop-info {
+  text-align: center;
+}
 .detail-shop-info .shop-services {
   display: flex;
   flex-wrap: wrap;
@@ -109,5 +113,15 @@ export default {
   padding: 5px 30px;
   justify-content: space-between;
   align-items: center;
+}
+.detail-shop-info .allGoodsUrl {
+  padding: 20px 0 30px;
+  border-bottom: 5px solid rgba(0, 0, 0, 0.05);
+}
+.detail-shop-info .allGoodsUrl a{
+  padding: 10px 50px;
+  font-size: 12px;
+  border-radius: 5px;
+  background-color: rgba(0, 0, 0, 0.05);
 }
 </style>

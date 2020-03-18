@@ -1,12 +1,17 @@
 <template>
-  <div class="back-top">
+  <div class="back-top" @click="clickBackTop">
     <img src="~assets/img/common/top.png" />
   </div>
 </template>
 
 <script>
 export default {
-  name: "BackTop"
+  name: "BackTop",
+  methods: {
+    clickBackTop(){
+      this.$bus.$emit('backUp');
+    },
+  },
 };
 </script>
 

@@ -43,6 +43,10 @@ export default {
       // console.log('-----------scroll');
       this.scroll.refresh();
     },
+    backUp(){
+      this.scrollTo(0,0,0);
+      this.scroll.refresh();
+    },
   },
   mounted(){
     this.scroll = new BScroll(this.$refs.wrapper,{
@@ -56,6 +60,8 @@ export default {
     const refresh = debounce(this,this.imgLoadOk);
     this.$bus.$on('imgLoadOk',refresh);
     this.$bus.$on('imgLoadRefresh',refresh);
+    // 监听回到顶部的点击事件
+    this.$bus.$on('backUp',this.backUp);
   },
 }
 </script>

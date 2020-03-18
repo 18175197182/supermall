@@ -1,15 +1,20 @@
 <template>
   <div id="home">
     <home-nav-bar />
-    <tab-control v-show="showTopTabControl" class="topTabControl" :titles="tabControlTitles" @selectGoodsType="selectGoodsType" />
+    <tab-control
+      v-show="showTopTabControl"
+      class="topTabControl"
+      :titles="tabControlTitles"
+      @selectGoodsType="selectGoodsType"
+    />
     <scroll class="content" ref="scroll" :probe-type="3" :pull-up-load="true">
       <home-swiper :result="bannerList"></home-swiper>
       <home-recommend :recommends="recommendList" />
       <home-feature-view />
-      <tab-control :titles="tabControlTitles" @selectGoodsType="selectGoodsType" ref="tabControl"/>
+      <tab-control :titles="tabControlTitles" @selectGoodsType="selectGoodsType" ref="tabControl" />
       <goods-list :goods-list="currentShowData" />
     </scroll>
-    <back-top v-show="showBackTop" @click.native="clickBackTop"/>
+    <back-top v-show="showBackTop"/>
   </div>
 </template>
 <script>
@@ -18,7 +23,7 @@ import TabControl from "components/common/tabcontrol/TabControl";
 import GoodsList from "components/content/goods/GoodsList";
 import Scroll from "components/common/scroll/Scroll";
 import BackTop from "components/content/backTop/BackTop";
-import {debounce} from 'common/util.js';
+import { debounce } from "common/util.js";
 
 // 导入子组件组件
 import HomeNavBar from "views/home/components/HomeNavBar";
@@ -28,6 +33,7 @@ import HomeFeatureView from "./components/HomeFeatureView";
 
 // 导入方法
 import { getHomeMultidata, getHomeData } from "network/home.js";
+import { checkShowBackTop } from "common/util.js";
 
 export default {
   name: "Home",
@@ -81,21 +87,16 @@ export default {
       // 是否显示贴顶的tabControl
       showTopTabControl: false,
       // 保存home中滚动的位置
-      saveY: 0,
+      saveY: 0
     };
   },
   methods: {
-    // 判断是否显示BackTop
-    checkShowBackTop(position){
-      if(-position.y >= document.body.clientHeight){
+    checkShowBackTop(position) {
+      if (-position.y >= document.body.clientHeight) {
         this.showBackTop = true;
-      }else {
+      } else {
         this.showBackTop = false;
       }
-    },
-    // 回到top的方法
-    clickBackTop(){
-      this.$refs.scroll.scrollTo(0,0);
     },
     // 封装获取/home/multidata的数据，并保存到data中
     getHomeMultidata() {
@@ -121,12 +122,18 @@ export default {
       }
     },
     // 判断是否显示贴顶的TabControl
-    checkShowTopTabControl(){
+    checkShowTopTabControl() {
       const tabControl = this.$refs.tabControl;
-      if(!this.showTopTabControl && tabControl.$el.getBoundingClientRect().top <= 44){
+      if (
+        !this.showTopTabControl &&
+        tabControl.$el.getBoundingClientRect().top <= 44
+      ) {
         this.showTopTabControl = true;
       }
-      if(this.showTopTabControl && tabControl.$el.getBoundingClientRect().top > 44){
+      if (
+        this.showTopTabControl &&
+        tabControl.$el.getBoundingClientRect().top > 44
+      ) {
         this.showTopTabControl = false;
       }
     },
@@ -136,11 +143,11 @@ export default {
       this.currentShowData = this.goods[dataType].list;
     },
     // 上拉后加载更多数据
-    getMoreData(){
-      this.goods[this.currentShowType].page += 1
+    getMoreData() {
+      this.goods[this.currentShowType].page += 1;
       const params = {
         type: this.currentShowType,
-        page: this.goods[this.currentShowType].page,
+        page: this.goods[this.currentShowType].page
       };
       getHomeData(params).then(res => {
         this.goods[this.currentShowType].list.push(...res.data.list);
@@ -157,28 +164,27 @@ export default {
 
     // 获取/home/data数据
     this.getHomeData();
-
   },
-  mounted(){
+  mounted() {
     // 绑定scroll事件，显示回到顶部的组件
-    this.$refs.scroll.on('scroll',this.checkShowBackTop);
+    this.$refs.scroll.on("scroll",this.checkShowBackTop);
     // 绑定上拉事件，用于上拉加载更多
-    const func = debounce(this,this.getMoreData);
-    this.$refs.scroll.on('pullingUp',() => {  
+    const func = debounce(this, this.getMoreData);
+    this.$refs.scroll.on("pullingUp", () => {
       func();
     });
     // 监听页面滚动，给让tabControl贴在上面
-    this.$refs.scroll.on('scroll',this.checkShowTopTabControl);
+    this.$refs.scroll.on("scroll", this.checkShowTopTabControl);
   },
   // 切换回来时，回到刚刚保存的位置
-  activated(){
+  activated() {
     this.$refs.scroll.scroll.refresh();
-    this.$refs.scroll.scrollTo(0,this.saveY,0);
+    this.$refs.scroll.scrollTo(0, this.saveY, 0);
   },
   // 切换别的组件时保存y的位置
-  deactivated(){
+  deactivated() {
     this.saveY = this.$refs.scroll.scroll.y;
-  },
+  }
 };
 </script>
 
